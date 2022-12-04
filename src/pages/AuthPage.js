@@ -1,16 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {useHttp} from "../hooks/http.hook";
+import {useMessage} from "../hooks/message.hook";
 
 
 export const AuthPage = () => {
+	const message = useMessage()
 	const {loading, request, error, clearError} = useHttp()
 	const [form, setForm] = useState({
 		email: "", password: ""
 	})
 
-	useEffect(()=>{
-
-	}, [error])
+	useEffect(() => {
+		message(error)
+		clearError()
+	}, [error, message, clearError])
 
 	const changeHandler = event => {
 		setForm({...form, [event.target.name]: event.target.value})
@@ -19,10 +22,17 @@ export const AuthPage = () => {
 	const registerHandler = async () => {
 		try {
 			const data = await request("/api/auth/register", "POST", {...form})
+			message(data.message)
 			console.log("data", data)
-		} catch (e) {
+		} catch (e) {}
+	}
 
-		}
+	const loginHandler = async () => {
+		try {
+			const data = await request("/api/auth/login", "POST", {...form})
+			message(data.message)
+			console.log("data", data.message)
+		} catch (e) {}
 	}
 
 	return (<div className="row">
@@ -32,6 +42,7 @@ export const AuthPage = () => {
 				<div className="card-content white-text">
 					<span className="card-title center-align">Авторизация</span>
 					<div>
+
 						<div className="input-field">
 							<input
 								className="yellow-input"
@@ -62,6 +73,7 @@ export const AuthPage = () => {
 					<button
 						className="btn yellow darken-4"
 						style={{marginRight: 20}}
+						onClick={loginHandler}
 						disabled={loading}
 					>
 						Войти
