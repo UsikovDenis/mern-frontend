@@ -1,10 +1,10 @@
 import React from 'react';
 
 
-export const DitailPage = () => {
+export const DetailPage = () => {
    return (
       <div>
-         <h1>DitailPage</h1>
+         <h1>DetailPage</h1>
       </div>
    )
 }
